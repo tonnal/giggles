@@ -102,7 +102,7 @@ export async function generateStorybookCover(params: {
       style: 'vivid',
     });
 
-    const imageUrl = response.data[0]?.url;
+    const imageUrl = response.data?.[0]?.url;
 
     if (!imageUrl) {
       throw new Error('No image URL returned from DALL-E 3');
@@ -154,7 +154,7 @@ export async function generatePageIllustration(params: {
       style: 'vivid',
     });
 
-    const imageUrl = response.data[0]?.url;
+    const imageUrl = response.data?.[0]?.url;
 
     if (!imageUrl) {
       throw new Error('No image URL returned from DALL-E 3');
