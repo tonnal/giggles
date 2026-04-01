@@ -53,7 +53,7 @@ Edit `.env.local` with your configuration:
 # Database
 MONGODB_URI=mongodb://localhost:27017/giggles
 # Or use MongoDB Atlas:
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/giggles
+# MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/giggles
 
 # Redis
 REDIS_URL=redis://localhost:6379
