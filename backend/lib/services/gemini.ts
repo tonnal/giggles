@@ -5,9 +5,15 @@ import { StorybookTheme, StorybookTone } from '@/lib/types';
 // Initialize Gemini client for video generation
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
-// Initialize OpenAI client for DALL-E 3 image generation
+// Emergent Integration Proxy URL for universal LLM key
+const EMERGENT_BASE_URL = process.env.INTEGRATION_PROXY_URL 
+  ? `${process.env.INTEGRATION_PROXY_URL}/openai`
+  : 'https://integrations.emergentagent.com/openai';
+
+// Initialize OpenAI client for DALL-E 3 image generation with Emergent proxy
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.EMERGENT_LLM_KEY || process.env.OPENAI_API_KEY || 'placeholder',
+  baseURL: process.env.EMERGENT_LLM_KEY ? EMERGENT_BASE_URL : undefined,
 });
 
 // Get model from environment variable
@@ -17,12 +23,12 @@ if (!process.env.GEMINI_API_KEY) {
   console.warn('⚠️  GEMINI_API_KEY not set in environment variables');
 }
 
-if (!process.env.OPENAI_API_KEY) {
-  console.warn('⚠️  OPENAI_API_KEY not set - image generation will use placeholders');
+if (!process.env.EMERGENT_LLM_KEY && !process.env.OPENAI_API_KEY) {
+  console.warn('⚠️  Neither EMERGENT_LLM_KEY nor OPENAI_API_KEY set - image generation will use placeholders');
 }
 
 console.log(`✅ Gemini configured with model: ${MODEL_NAME}`);
-console.log(`✅ DALL-E 3 configured for image generation`);
+console.log(`✅ DALL-E 3 configured for image generation via ${process.env.EMERGENT_LLM_KEY ? 'Emergent proxy' : 'direct OpenAI'}`);
 
 /**
  * Theme-specific style guides for consistent image generation

@@ -1,19 +1,25 @@
 import OpenAI from 'openai';
 import { IMemoryTaggingInput, IMemoryTaggingOutput } from '@/lib/types';
 
-// Initialize OpenAI client
+// Emergent Integration Proxy URL for universal LLM key
+const EMERGENT_BASE_URL = process.env.INTEGRATION_PROXY_URL 
+  ? `${process.env.INTEGRATION_PROXY_URL}/openai`
+  : 'https://integrations.emergentagent.com/openai';
+
+// Initialize OpenAI client with Emergent proxy
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.EMERGENT_LLM_KEY || process.env.OPENAI_API_KEY,
+  baseURL: process.env.EMERGENT_LLM_KEY ? EMERGENT_BASE_URL : undefined,
 });
 
-// Get model from environment variable (GPT-5.1 by default)
-const MODEL = process.env.OPENAI_MODEL || 'gpt-5.1';
+// Get model from environment variable (GPT-4o by default for compatibility)
+const MODEL = process.env.OPENAI_MODEL || 'gpt-4o';
 
-if (!process.env.OPENAI_API_KEY) {
-  console.warn('⚠️  OPENAI_API_KEY not set in environment variables');
+if (!process.env.EMERGENT_LLM_KEY && !process.env.OPENAI_API_KEY) {
+  console.warn('⚠️  Neither EMERGENT_LLM_KEY nor OPENAI_API_KEY is set');
+} else {
+  console.log(`✅ OpenAI configured with model: ${MODEL} via ${process.env.EMERGENT_LLM_KEY ? 'Emergent proxy' : 'direct OpenAI'}`);
 }
-
-console.log(`✅ OpenAI configured with model: ${MODEL}`);
 
 /**
  * Auto-tag a memory based on caption and optionally image analysis

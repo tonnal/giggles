@@ -7,8 +7,16 @@ import OpenAI from 'openai';
 import fs from 'fs/promises';
 import path from 'path';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const MODEL = process.env.OPENAI_MODEL || 'gpt-5.1';
+// Emergent Integration Proxy URL for universal LLM key
+const EMERGENT_BASE_URL = process.env.INTEGRATION_PROXY_URL 
+  ? `${process.env.INTEGRATION_PROXY_URL}/openai`
+  : 'https://integrations.emergentagent.com/openai';
+
+const openai = new OpenAI({ 
+  apiKey: process.env.EMERGENT_LLM_KEY || process.env.OPENAI_API_KEY || 'placeholder',
+  baseURL: process.env.EMERGENT_LLM_KEY ? EMERGENT_BASE_URL : undefined,
+});
+const MODEL = process.env.OPENAI_MODEL || 'gpt-4o';
 
 /**
  * POST /api/test/generate-reel

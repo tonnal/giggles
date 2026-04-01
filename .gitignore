@@ -10,3 +10,7 @@ backend/assets/music/
 backend/assets/my_music/
 backend/assets/test_photo/
 backend/tsconfig.tsbuildinfo
+-e 
+# Environment files
+*.env
+*.env.*

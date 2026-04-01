@@ -14,8 +14,14 @@ import OpenAI from 'openai';
 // Ubuntu: sudo apt-get install ffmpeg
 // Windows: Download from https://ffmpeg.org/download.html
 
+// Emergent Integration Proxy URL for universal LLM key
+const EMERGENT_BASE_URL = process.env.INTEGRATION_PROXY_URL 
+  ? `${process.env.INTEGRATION_PROXY_URL}/openai`
+  : 'https://integrations.emergentagent.com/openai';
+
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.EMERGENT_LLM_KEY || process.env.OPENAI_API_KEY || 'placeholder',
+  baseURL: process.env.EMERGENT_LLM_KEY ? EMERGENT_BASE_URL : undefined,
 });
 
 // Types
